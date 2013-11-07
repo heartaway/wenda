@@ -1,0 +1,40 @@
+  <div style="background-image:url('assets/img/header-ke.jpg');height: 60px;margin-top: -40px;">
+            <div id="logo" style="float: left;margin-top: 10px;margin-left: 10px;">
+                #if($loginUser)
+                    <a href="index.htm?userId=$loginUser.getId()"><img alt="Logo" src="assets/img/logo.png?1357870150"></a>
+                #else
+                    <a href="index.htm"><img alt="Logo" src="assets/img/logo.png?1357870150"></a>
+                #end
+            </div>
+
+      <div class="main-link" style="float: left;margin-left:30px;font-size: 14px;font-weight: bold;text-decoration: none;display: block;height: 40px;line-height: 40px;padding: 0 8px;color:#ffffff;padding-top: 28px;">
+  #if($loginUser)
+      <a href="index.htm?userId=$loginUser.getId()" style="text-decoration: none; color: #FFFFFF;" >问答首页</a>
+      #else
+          <a href="index.htm" >问答首页</a>
+      #end
+      </div>
+
+              <div style="float:right; margin-top:28px;margin-right:8px;font-size: 13px;font-weight: bold;font-family: 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;color:#ffffff;">
+            #if($loginUser)
+                <form id="" class="form-default" method="post" action="">
+                    <input type="hidden" name="action" value="commonAction"/>
+                    <input type="hidden" name="userId" value="$loginUser.getId()"/>
+                    $csrfToken.uniqueHiddenField
+
+                    #if($loginUser.getDisplayName())
+                        $loginUser.getDisplayName()
+                    #else
+                        $loginUser.getName()
+                    #end
+                    ,
+                    <input class="logout" type="submit" value="退出"
+                           name="event_submit_do_logout"
+                           style="font-size: 13px;margin-top:-3px;font-weight: bold;font-family: 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;color:#ffffff;">
+                </form>
+            #else
+                <a href="login.htm"  style="font-size: 13px;font-weight: bold;margin-top:-3px;font-family: 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;color:#ffffff;">登录</a>
+            #end
+              </div>
+
+            </div>

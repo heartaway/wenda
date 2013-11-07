@@ -1,0 +1,7 @@
+    <span >我的主页</span>
+     <div class="bs-docs-example">
+             <p class="text-info"><a href="personalQuestions.htm?pageIndex=1&userId=$user.getId()">我提出的问题 ($personalQuestionCount)</a></p>
+             <p class="text-info"><a href="personalAnswers.htm?pageIndex=1&userId=$user.getId()">我回答的问题 ($personalAnswerCount)</a></p>
+             <p class="text-info"><a href="personalAttentions.htm?pageIndex=1&userId=$user.getId()">我关注的问题(<lable id="myAttentionCount">$personalAttentionCount</lable>)</a></p>
+           <!--  <p class="text-info"><a href="#">请我回答的问题( 0 )</a></p> -->
+     </div>

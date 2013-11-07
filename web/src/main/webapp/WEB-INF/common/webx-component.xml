@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:services="http://www.alibaba.com/schema/services"
+    xmlns:dr-factories="http://www.alibaba.com/schema/services/data-resolver/factories"
+    xmlns:mapping-rules="http://www.alibaba.com/schema/services/mapping-rules"
+    xmlns:pull-factories="http://www.alibaba.com/schema/services/pull/factories"
+    xmlns:tpl-engines="http://www.alibaba.com/schema/services/template/engines"
+    xmlns:ftl-plugins="http://www.alibaba.com/schema/services/template/engines/freemarker/plugins"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xsi:schemaLocation="
+        http://www.alibaba.com/schema/services http://localhost:8080/schema/services.xsd
+        http://www.alibaba.com/schema/services/data-resolver/factories http://localhost:8080/schema/services-data-resolver-factories.xsd
+        http://www.alibaba.com/schema/services/mapping-rules http://localhost:8080/schema/services-mapping-rules.xsd
+        http://www.alibaba.com/schema/services/pull/factories http://localhost:8080/schema/services-pull-factories.xsd
+        http://www.alibaba.com/schema/services/template/engines http://localhost:8080/schema/services-template-engines.xsd
+        http://www.alibaba.com/schema/services/template/engines/freemarker/plugins http://localhost:8080/schema/services-template-engines-freemarker-plugins.xsd
+        http://www.alibaba.com/schema/services/template/engines/velocity/plugins http://localhost:8080/schema/services-template-engines-velocity-plugins.xsd
+        http://www.springframework.org/schema/beans http://localhost:8080/schema/www.springframework.org/schema/beans/spring-beans.xsd
+    ">
+
+    <!-- 此文件仅被 home-*.xml 引用。 -->
+    <!-- 注意：此文件需要property-placeholder变量：${component}。 -->
+
+    <beans:import resource="webx-root.xml" />
+
+    <!-- 综合设置。 -->
+    <services:webx-configuration />
+
+    <!-- 将beans暴露给模板。这里定义的tools可被所有components之间共享。 -->
+    <services:pull xmlns="http://www.alibaba.com/schema/services/pull/factories">
+        <utils />
+        <form-tool />
+        <page-tool />
+        <tbCsrfToken id="csrfToken"/>
+        <rundata-tool/>
+        <control-tool />
+        <uris-tool />
+        <bean-tool id="tmsTool" scope="global" class="com.taobao.cms.client.CMSTool"/>
+        <bean-tool id="securityUtil" scope="global" class="com.taobao.security.util.SecurityUtil"/>
+    </services:pull>
+
+</beans:beans>

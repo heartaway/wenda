@@ -1,0 +1,113 @@
+DROP TABLE IF EXISTS `qa_questions`;
+CREATE TABLE  `qa_questions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT ,
+  `user_id` int(11) DEFAULT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `content` mediumtext DEFAULT NULL,
+  `same_ask_count`  int(11) DEFAULT 0,
+  `top_answer_id`  int(11) DEFAULT NULL,
+  `attention_count`  int(11) DEFAULT 0,
+  `answer_count`  int(11) DEFAULT 0,
+  `features` mediumtext DEFAULT NULL,
+  `gmt_create` datetime DEFAULT NULL,
+  `gmt_modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `qa_answers`;
+CREATE TABLE  `qa_answers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT ,
+  `user_id` int(11) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `content` mediumtext DEFAULT NULL,
+  `question_id`  int(11) DEFAULT NULL,
+  `comment_count`  int(11) DEFAULT 0,
+  `good_count`  int(11) DEFAULT 0,
+  `bad_count`  int(11) DEFAULT 0,
+  `gmt_create` datetime DEFAULT NULL,
+  `gmt_modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+DROP TABLE IF EXISTS `qa_attentions`;
+CREATE TABLE  `qa_attentions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT ,
+  `user_id` int(11) DEFAULT NULL,
+  `question_id`  int(11) DEFAULT NULL,
+  `gmt_create` datetime DEFAULT NULL,
+  `gmt_modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `qa_categories`;
+CREATE TABLE  `qa_categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT ,
+  `name` varchar(45) NOT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  `question_count` int(11) DEFAULT NULL,
+  `gmt_create` datetime DEFAULT NULL,
+  `gmt_modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `qa_invitations`;
+CREATE TABLE  `qa_invitation` (
+  `id` int(11) NOT NULL AUTO_INCREMENT ,
+  `user_id` int(11) DEFAULT NULL,
+  `killer` varchar(128) NOT NULL,
+  `gmt_create` datetime DEFAULT NULL,
+  `gmt_modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `qa_comments`;
+CREATE TABLE  `qa_comments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT ,
+  `user_id` int(11) DEFAULT NULL,
+  `target_id` int(11) DEFAULT NULL,
+  `target_type` varchar(255) DEFAULT NULL,
+  `content` mediumtext DEFAULT NULL,
+  `gmt_create` datetime DEFAULT NULL,
+  `gmt_modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `qa_widgets`;
+CREATE TABLE  `qa_widgets` (
+  `id` int(11) NOT NULL AUTO_INCREMENT ,
+  `name`varchar(255) DEFAULT NULL,
+  `src` varchar(1024) DEFAULT NULL,
+  `type` ENUM('MODULE','LAYOUT') DEFAULT 'MODULE',
+  `status` boolean DEFAULT 0,  
+  `person` boolean DEFAULT 0,  
+  `gmt_create` datetime DEFAULT NULL,
+  `gmt_modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `qa_goodbad`;
+CREATE TABLE  `qa_goodbad` (
+  `id` int(11) NOT NULL AUTO_INCREMENT ,
+  `answer_id`  int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `good` boolean DEFAULT 0,  
+  `bad` boolean DEFAULT 0,  
+  `gmt_create` datetime DEFAULT NULL,
+  `gmt_modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `qa_sameask`;
+CREATE TABLE  `qa_sameask` (
+  `id` int(11) NOT NULL AUTO_INCREMENT ,
+  `question_id`  int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `gmt_create` datetime DEFAULT NULL,
+  `gmt_modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

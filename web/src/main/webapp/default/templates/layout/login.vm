@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>淘测试-问答</title>
+    $control.setTemplate("header.vm")
+    <link href="assets/css/bootstrap.css" rel="stylesheet" >
+    <link href="assets/css/docs.css" rel="stylesheet" >
+    <link href="assets/css/login.css" rel="stylesheet" >
+</head>
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
+    $control.setTemplate("navBar.vm")
+    $control.setTemplate("topBar.vm")
+
+<div class="container">
+            $screen_placeholder
+</div>
+<!-- Footer -->
+    $control.setTemplate("footer.vm")
+</body>
+</html>

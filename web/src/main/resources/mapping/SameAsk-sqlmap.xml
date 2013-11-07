@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="Sameask">
+    <typeAlias alias="SameAskDO" type="com.taobao.taotest.qasystem.biz.domain.SameAskDO"/>
+
+    <resultMap id="sameAskDO" class="SameAskDO">
+        <result column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="question_id" property="questionId"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+    </resultMap>
+
+
+    <sql id="SameAskDAO.selectorAllInfo">
+        select id,user_id,question_id,gmt_create,gmt_modified from qa_sameask
+	</sql>
+
+    <select id="SameAskDAO.queryByQuestionIdAndUserId" parameterClass="java.util.HashMap" resultMap="sameAskDO">
+        <include refid="SameAskDAO.selectorAllInfo"/>
+        where question_id=#questionId# and user_id=#userId#
+    </select>
+
+    <insert id="SameAskDAO.insert" parameterClass="SameAskDO">
+        INSERT INTO qa_sameask
+        (user_id,question_id,gmt_create,gmt_modified)
+        VALUES
+        (#userId#,#questionId#,now(), now())
+        <selectKey resultClass="Integer">
+          select last_insert_id() as id from qa_sameask limit 1
+        </selectKey>
+    </insert>
+
+
+</sqlMap>

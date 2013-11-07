@@ -1,0 +1,26 @@
+<div class="mk-content clear">
+    <div class="fdk">
+        <p class="error">
+            #if($!error.statusCode==404)
+                请求的页面不存在，请确认访问的链接是否有误
+            #elseif($!error.statusCode==505)
+                请不要重复提交请求
+            #elseif($error)
+                $error
+            #elseif($errors)
+                #foreach($e in $errors)
+                    $e </br>
+                #end
+            #else
+                系统错误，请稍候再试！！
+            #end
+        </p>
+        <p class="rest">
+            #if($loginUser)
+                <a href="index.htm?userId=$loginUser.getId()">返回到首页</a>
+            #else
+                <a href="index.htm">返回到首页</a>
+            #end
+        </p>
+    </div>
+</div>

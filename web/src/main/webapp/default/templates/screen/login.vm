@@ -1,0 +1,26 @@
+﻿<div class="wrapper">
+    <form class="form-default" method="post" action="">
+        <input type="hidden" name="action" value="commonAction"/>
+        $csrfToken.uniqueHiddenField
+
+    <div class="loginBox">
+        <div class="loginBoxCenter">
+            <p>用户名：<input  id="userName" name="userName" class="loginInput" autofocus="autofocus" required="required" autocomplete="off" placeholder="请输入用户名" value="" /></p>
+            <p>密&nbsp;&nbsp;&nbsp;码： <input type="password" id="password" name="password" class="loginInput" required="required" placeholder="请输入密码" value="" /></p>
+        </div>
+        <div class="loginBoxButtons">
+            <input id="remember" type="checkbox" name="remember"   style="float:left;"/>
+            <a class="forgetLink" href="http://www.taobaotest.com/users/password_reset" style="float:right;">忘记密码?</a>
+            <label>&nbsp;记住登录状态</label>
+            <br />
+            <input class="btn loginBtn" type="submit" value="登录"
+                   name="event_submit_do_login">
+            <p class="loginError" ><font color="red">
+                #if($loginError)
+                #$loginError
+                #end
+                </font> </p>
+        </div>
+    </div>
+    </form>
+</div>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="Widget">
+    <typeAlias alias="WidgetDO" type="com.taobao.taotest.qasystem.biz.domain.WidgetDO"/>
+
+    <resultMap id="widgetDO" class="WidgetDO">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="status" property="status"/>
+        <result column="src" property="src"/>
+        <result column="type" property="type"/>
+        <result column="person" property="person"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+    </resultMap>
+
+
+    <sql id="WidgetDAO.selectorAllInfo">
+        select id,name,status,src,type,person,gmt_create,gmt_modified from qa_widgets
+	</sql>
+
+    <select id="WidgetDAO.queryById" parameterClass="java.lang.Integer" resultMap="widgetDO">
+        <include refid="WidgetDAO.selectorAllInfo"/>
+        where id=#value#
+    </select>
+
+    <select id="WidgetDAO.queryAllModule" resultMap="widgetDO">
+          <include refid="WidgetDAO.selectorAllInfo"/>
+        where  type= 'MODULE'
+    </select>
+
+    <select id="WidgetDAO.queryShowModule" resultMap="widgetDO">
+        <include refid="WidgetDAO.selectorAllInfo"/>
+        where  type= 'MODULE'   and status = 1
+    </select>
+
+    <select id="WidgetDAO.queryModuleByName" parameterClass="java.lang.String" resultMap="widgetDO">
+        <include refid="WidgetDAO.selectorAllInfo"/>
+        where  type= 'MODULE'   and name = #value#
+    </select>
+
+    <select id="WidgetDAO.queryLayoutByName" parameterClass="java.lang.String" resultMap="widgetDO">
+        <include refid="WidgetDAO.selectorAllInfo"/>
+        where  type= 'LAYOUT'   and name = #value#
+    </select>
+
+    <insert id="WidgetDAO.insert" parameterClass="WidgetDO">
+        INSERT INTO qa_widgets
+        (name,status,src,type,person,gmt_create,gmt_modified)
+        VALUES
+        (#name#,#status#, #src#,#type#,#person#,now(), now())
+        <selectKey resultClass="Integer">
+          select last_insert_id() as id from qa_answers limit 1
+        </selectKey>
+    </insert>
+
+
+    <update id="WidgetDAO.update" parameterClass="WidgetDO">
+        UPDATE qa_widgets SET GMT_MODIFIED=now()
+        <isNotNull prepend="," property="name">name=#name#</isNotNull>
+        <isNotNull prepend="," property="status">status=#status#</isNotNull>
+        <isNotNull prepend="," property="src">src=#src#</isNotNull>
+        <isNotNull prepend="," property="type">type=#type#</isNotNull>
+        <isNotNull prepend="," property="person">type=#person#</isNotNull>
+        where id=#id#
+    </update>
+
+    <delete id="WidgetDAO.deleteById" parameterClass="java.lang.Integer">
+      DELETE FROM qa_widgets WHERE id = #value#
+    </delete>
+
+</sqlMap>

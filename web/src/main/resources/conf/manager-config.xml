@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+
+       default-autowire="byName">
+    <!--Taotest developer manager -->
+    <context:annotation-config></context:annotation-config>
+
+    <bean id="answerManager" class="com.taobao.taotest.qasystem.biz.manager.AnswerManagerImpl">
+    </bean>
+    <bean id="attentionManager" class="com.taobao.taotest.qasystem.biz.manager.AttentionManagerImpl">
+    </bean>
+    <bean id="categoryManager" class="com.taobao.taotest.qasystem.biz.manager.CategoryManagerImpl">
+    </bean>
+    <bean id="invitationManager" class="com.taobao.taotest.qasystem.biz.manager.InvitationManagerImpl">
+    </bean>
+    <bean id="questionManager" class="com.taobao.taotest.qasystem.biz.manager.QuestionManagerImpl">
+    </bean>
+    <bean id="commentManager" class="com.taobao.taotest.qasystem.biz.manager.CommentManagerImpl">
+    </bean>
+    <bean id="widgetManager" class="com.taobao.taotest.qasystem.biz.manager.WidgetManagerImpl">
+    </bean>
+    <bean id="goodBadManager" class="com.taobao.taotest.qasystem.biz.manager.GoodBadManagerImpl">
+    </bean>
+    <bean id="sameAskManager" class="com.taobao.taotest.qasystem.biz.manager.SameAskManagerImpl">
+    </bean>
+    <bean id="userManager" class="com.taobao.taotest.qasystem.biz.manager.UserManagerImpl">
+    </bean>
+
+</beans>

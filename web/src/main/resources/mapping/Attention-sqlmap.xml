@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="Attention">
+    <typeAlias alias="AttentionDO" type="com.taobao.taotest.qasystem.biz.domain.AttentionDO"/>
+
+    <resultMap id="attentionDO" class="AttentionDO">
+        <result column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="question_id" property="questionId"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+    </resultMap>
+
+
+    <sql id="AttentionDAO.selectorAllInfo">
+        select id,user_id,question_id,gmt_create,gmt_modified from qa_attentions
+	</sql>
+
+    <select id="AttentionDAO.queryById"
+            parameterClass="java.lang.Integer"
+            resultMap="attentionDO">
+        <include refid="AttentionDAO.selectorAllInfo"/>
+        where id=#value#
+    </select>
+
+    <select id="AttentionDAO.queryListByUserId" parameterClass="java.lang.Integer" resultMap="attentionDO">
+        <include refid="AttentionDAO.selectorAllInfo"/>
+        where user_id=#value#
+        <![CDATA[ order by gmt_create DESC ]]>
+    </select>
+
+    <select id="AttentionDAO.queryByQuestionIdAndUserId" parameterClass="java.util.HashMap" resultMap="attentionDO">
+        <include refid="AttentionDAO.selectorAllInfo"/>
+        where user_id=#userId# and question_id = #questionId#
+    </select>
+    <insert id="AttentionDAO.insert" parameterClass="AttentionDO">
+        INSERT INTO qa_attentions
+        (user_id,question_id,gmt_create,gmt_modified)
+        VALUES
+        (#userId#,#questionId#,now(), now())
+        <selectKey resultClass="Integer" keyProperty="id">
+            select last_insert_id() as id from qa_attentions limit 1
+        </selectKey>
+    </insert>
+
+
+    <update id="AttentionDAO.update" parameterClass="AttentionDO">
+        UPDATE qa_attentions SET GMT_MODIFIED=now()
+        <isNotNull prepend="," property="userId">user_id=#userId:INT#</isNotNull>
+        <isNotNull prepend="," property="questionId">question_id=#questionId:INT#</isNotNull>
+        where id=#id:INT#
+    </update>
+
+    <delete id="AttentionDAO.deleteById" parameterClass="java.lang.Integer">
+      DELETE FROM qa_attentions WHERE id = #value#
+    </delete>
+
+    <delete id="AttentionDAO.deleteByQuestionIdAndUserId" parameterClass="java.util.HashMap">
+      DELETE FROM qa_attentions WHERE user_id=#userId# and question_id = #questionId#
+    </delete>
+
+</sqlMap>

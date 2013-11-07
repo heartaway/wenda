@@ -1,0 +1,87 @@
+#set($tokenKey = ${csrfToken.getKey()})
+#set($tokenValue = ${csrfToken.getUniqueToken()})
+<p>
+    <a href="#addQuestion" role="button" data-toggle="modal">
+        <button class="btn btn-large btn-block" type="button">我要提问</button>
+    </a>
+</p>
+<!-- 弹出浮层： 创建问题 -->
+<!-- 弹出浮层： 创建问题 开始 -->
+<br/>
+#if($loginUser)
+<div id="addQuestion" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 id="myModalLabel">添加问题</h4>
+    </div>
+    <div class="modal-body">
+        <form id="" class="form-default" method="post" action="index.htm">
+            <input type="hidden" name="action" value="questionAction"/>
+            <input type="hidden" name="userId" value="$loginUser.getId()"/>
+            $csrfToken.uniqueHiddenField
+            <p>问题描述：</p>
+            <textarea rows="3" class="span7 font-family" name="content" required="required" autocomplete="off"
+                      placeholder="淘测试问答开启啦!"></textarea>
+
+            <p>问题分类：</p>
+            <select class="font-family" name="categoryId">
+                #foreach($category in $categoryList)
+                    <option value="$category.id">$category.name</option>
+                #end
+            </select>
+
+            <!--      此功能先隐藏
+            <p>邀请高手回答问题：</p>
+            <div class="input-prepend">
+                <span class="add-on">@</span>
+                <input name="invitation" class="span3 font-family" id="prependedInput" type="text"
+                       placeholder="输入邀请人的花名">
+            </div>
+                   -->
+    </div>
+    #if($info)
+        <div class="alert">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Warning!</strong> $info.
+        </div>
+    #end
+    <div class="modal-footer">
+        <input class="btn btn-primary font-family" id="modal-submit" type="submit" value="提交问题"
+               name="event_submit_do_insert_question">
+        <button class="btn font-family" data-dismiss="modal">取消</button>
+        </form>
+
+    </div>
+</div>
+
+#else
+<div id="addQuestion" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <br/>
+    </div>
+    <br/>
+
+    <div class="modal-body">
+        <p align="center">您还没有登录，请先<a href="login.vm">登录</a>。</p>
+
+        <div class="modal-footer">
+            <button class="btn font-family" data-dismiss="modal">取消</button>
+        </div>
+    </div>
+</div>
+
+#end
+
+<!-- 弹出浮层： 创建问题  结束-->
+
+<!--  动态加载 侧边栏模块 widgetList   开始-->
+
+#foreach($widget in $widgetList)
+    $control.setTemplate($widget.src)
+#end
+
+<!--  动态加载 侧边栏模块 widgetDOList   结束 -->

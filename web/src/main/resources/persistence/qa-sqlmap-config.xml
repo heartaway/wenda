@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+        "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+    <settings cacheModelsEnabled="false" enhancementEnabled="false" lazyLoadingEnabled="false" maxRequests="3000"
+              maxSessions="3000" maxTransactions="3000" useStatementNamespaces="false"/>
+    <sqlMap resource="mapping/Question-sqlmap.xml"/>
+    <sqlMap resource="mapping/Answer-sqlmap.xml"/>
+    <sqlMap resource="mapping/Attention-sqlmap.xml"/>
+    <sqlMap resource="mapping/Category-sqlmap.xml"/>
+    <sqlMap resource="mapping/Invitation-sqlmap.xml"/>
+    <sqlMap resource="mapping/Comment-sqlmap.xml"/>
+    <sqlMap resource="mapping/Widget-sqlmap.xml"/>
+    <sqlMap resource="mapping/GoodBad-sqlmap.xml"/>
+    <sqlMap resource="mapping/SameAsk-sqlmap.xml"/>
+
+
+
+</sqlMapConfig>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="Category">
+    <typeAlias alias="CategoryDO" type="com.taobao.taotest.qasystem.biz.domain.CategoryDO"/>
+
+
+    <resultMap id="categoryDO" class="CategoryDO">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="question_count" property="questionCount"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+    </resultMap>
+
+
+    <sql id="CategoryDAO.selectorAllInfo">
+        select id,name,category_id,question_count,gmt_create,gmt_modified from qa_categories
+	</sql>
+
+
+    <insert id="CategoryDAO.insert" parameterClass="CategoryDO">
+        INSERT INTO qa_categories
+        (name,category_id,question_count,gmt_create,gmt_modified)
+        VALUES
+        (#name#,#categoryId#,#questionCount#,now(), now())
+        <selectKey resultClass="Integer" keyProperty="id">
+            select last_insert_id() as id from qa_categories limit 1
+        </selectKey>
+    </insert>
+
+    <select id="CategoryDAO.queryById" parameterClass="java.lang.Integer"  resultMap="categoryDO">
+        <include refid="CategoryDAO.selectorAllInfo"/>
+        where id=#value#
+    </select>
+
+    <select id="CategoryDAO.queryByName" parameterClass="java.lang.String" resultMap="categoryDO">
+        <include refid="CategoryDAO.selectorAllInfo"/>
+        where name=#value#
+    </select>
+
+    <select id="CategoryDAO.queryAllCategory"  resultMap="categoryDO">
+        <include refid="CategoryDAO.selectorAllInfo"/>
+    </select>
+
+    <update id="CategoryDAO.update" parameterClass="CategoryDO">
+        UPDATE qa_categories SET GMT_MODIFIED=now()
+        <isNotNull prepend="," property="name">name=#name:VARCHAR#</isNotNull>
+        <isNotNull prepend="," property="categoryId">category_id=#categoryId:INT#</isNotNull>
+        <isNotNull prepend="," property="questionCount">question_count=#questionCount:INT#</isNotNull>
+        where id=#id:INT#
+    </update>
+
+    <delete id="CategoryDAO.deleteById" parameterClass="java.lang.Integer">
+      DELETE FROM qa_categories WHERE id = #value#
+    </delete>
+</sqlMap>

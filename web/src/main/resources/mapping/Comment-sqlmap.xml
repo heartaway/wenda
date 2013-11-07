@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="Comment">
+        <typeAlias alias="CommentDO" type="com.taobao.taotest.qasystem.biz.domain.CommentDO"/>
+
+    <resultMap id="commentDO" class="CommentDO">
+        <result column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="target_id" property="targetId"/>
+        <result column="target_type" property="targetType"/>
+        <result column="content" property="content"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+    </resultMap>
+
+
+    <sql id="CommentDAO.selectorAllInfo">
+        select id,user_id,target_id,target_type,content,gmt_create,gmt_modified from qa_comments
+    </sql>
+
+    <select id="CommentDAO.queryById"
+            parameterClass="java.lang.Integer"
+            resultMap="commentDO">
+        <include refid="CommentDAO.selectorAllInfo"/>
+        where id=#value#
+    </select>
+
+    <select id="CommentDAO.queryListByTargetId" parameterClass="java.lang.Integer" resultMap="commentDO">
+        <include refid="CommentDAO.selectorAllInfo"/>
+        where target_id=#value#
+    </select>
+
+    <insert id="CommentDAO.insert" parameterClass="CommentDO">
+        INSERT INTO qa_comments
+        (user_id,target_id,target_type,content,gmt_create,gmt_modified)
+        VALUES
+        (#userId#,#targetId#,#targetType#, #content#,now(), now())
+        <selectKey resultClass="Integer">
+            select last_insert_id() as id from qa_comments limit 1
+        </selectKey>
+    </insert>
+
+
+    <update id="CommentDAO.update" parameterClass="CommentDO">
+        UPDATE qa_comments SET GMT_MODIFIED=now()
+        <isNotNull prepend="," property="userId">user_id=#userId:INT#</isNotNull>
+        <isNotNull prepend="," property="targetId">target_id=#targetId:INT#</isNotNull>
+        <isNotNull prepend="," property="targetType">target_type=#targetType:VARCHAR#</isNotNull>
+        <isNotNull prepend="," property="content">content=#content:MEDIUMTEXT#</isNotNull>
+        where id=#id:INT#
+    </update>
+
+    <delete id="CommentDAO.deleteById" parameterClass="java.lang.Integer">
+        DELETE FROM qa_comments WHERE id = #value#
+    </delete>
+
+</sqlMap>
+

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="Invitation">
+    <typeAlias alias="InvitationDO" type="com.taobao.taotest.qasystem.biz.domain.InvitationDO"/>
+
+
+    <resultMap id="invitationDO" class="InvitationDO">
+        <result column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="killer" property="killer"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+    </resultMap>
+
+
+    <sql id="InvitationDAO.selectorAllInfo">
+        select id,user_id,killer,gmt_create,gmt_modified from qa_invitations
+	</sql>
+
+    <select id="InvitationDAO.queryById"
+            parameterClass="java.lang.Integer"
+            resultMap="invitationDO">
+        <include refid="InvitationDAO.selectorAllInfo"/>
+        where id=#value#
+    </select>
+
+
+    <insert id="InvitationDAO.insert" parameterClass="InvitationDO">
+        INSERT INTO qa_invitations
+        (user_id,killer,,gmt_create,gmt_modified)
+        VALUES
+        (#userId#,#killer#,,now(), now())
+        <selectKey resultClass="Integer">
+            select last_insert_id() as id from qa_invitations limit 1
+        </selectKey>
+    </insert>
+
+
+    <delete id="InvitationDAO.deleteById" parameterClass="java.lang.Integer">
+      DELETE FROM qa_invitations WHERE id = #value#
+    </delete>
+
+</sqlMap>
+

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+
+    <bean id="answerDAO" class="com.taobao.taotest.qasystem.biz.dao.AnswerDAOImpl"/>
+    <bean id="attentionDAO" class="com.taobao.taotest.qasystem.biz.dao.AttentionDAOImpl"/>
+    <bean id="categoryDAO" class="com.taobao.taotest.qasystem.biz.dao.CategoryDAOImpl"/>
+    <bean id="invitationDAO" class="com.taobao.taotest.qasystem.biz.dao.InvitationDAOImpl"/>
+    <bean id="questionDAO" class="com.taobao.taotest.qasystem.biz.dao.QuestionDAOImpl"/>
+    <bean id="commentDAO" class="com.taobao.taotest.qasystem.biz.dao.CommentDAOImpl"/>
+    <bean id="widgetDAO" class="com.taobao.taotest.qasystem.biz.dao.WidgetDAOImpl"/>
+    <bean id="goodBadDAO" class="com.taobao.taotest.qasystem.biz.dao.GoodBadDAOImpl"/>
+    <bean id="sameAskDAO" class="com.taobao.taotest.qasystem.biz.dao.SameAskDAOImpl"/>
+
+    <bean id="userDAO" class="com.taobao.taotest.qasystem.biz.dao.UserDAOImpl"/>
+</beans>

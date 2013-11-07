@@ -1,0 +1,255 @@
+<!-- params: questionModel 包含评论和回复, 并且对最佳答案进行了置顶操作-->
+<div class="bs-docs-example">
+    #set($userId = $user.getId())
+    #if(!$userId)
+        #set($uid = "null")
+    #else
+        #set($uid =$!userId )
+    #end
+
+    <p class="qustionContent"> $questionModel.getQuestionContent()</p>
+
+    <div class="askTime">
+        <span> <i class="icon-user"></i> 提问者：
+            #if($questionModel.getQuestionUser().getDisplayName())
+                $questionModel.getQuestionUser().getDisplayName()
+            #else
+                $questionModel.getQuestionUser().getName()
+            #end
+        </span>
+        #if($questionModel.getQuestionUser().getId() == $uid)
+            <span class="editQuestion"> <i class=" icon-pencil"></i> <a href="#editQuestion" data-toggle="modal">修改</a></span>
+        #end
+        <span style="float:right;"><i
+                class=" icon-time"></i>提问于  $simpleDateFormat.format($questionModel.getCreateTime()) </span>
+    </div>
+</div>
+
+<div class="questionDetailTag">
+    <a href="#goToAnswer" class="label label-success anwserTag">
+        <label>我来回答   $questionModel.getAnswerCount()</label>
+    </a>
+    #if($questionModel.getIsAttention())
+        <a class="label label-important anwserTag">
+            <label id="J_attention_$questionModel.getQuestionId()" data-isattention="1"
+                   onclick="attention($questionModel.getQuestionId(),$uid);">取消关注  $questionModel.getAttentionCount()</label>
+        </a>
+    #else
+        <a class="label label-important anwserTag">
+            <label id="J_attention_$questionModel.getQuestionId()" data-isattention="0"
+                   onclick="attention($questionModel.getQuestionId(),$uid);">我要关注  $questionModel.getAttentionCount()</label>
+        </a>
+    #end
+    <a class="label label-warning anwserTag">
+        <label id="J_sameAsk_$questionModel.getQuestionId()" data-ischoose="0"
+               onclick="sameAsk($questionModel.getQuestionId(),$uid);">$questionModel.getSameAskCount()
+            人同问</label>
+    </a>
+    <!--<a  class="label label-info killerTag"><label>邀请高手回答</label></a>   -->
+    <br/>
+    <hr class="dotline"/>
+</div>
+<!-- 问题的答案 和评论-->
+#set($answerModelList = $questionModel.getAnswerModelList() )
+
+<div class="">
+    #foreach($answerModel in $answerModelList)
+        <div class="row-fluid">
+            <div class="span1">
+                <span class="goodComment">
+                <i class="icon-thumbs-up"></i>
+                  <span id="J_goodComment_$answerModel.getAnswerId()" data-ischoose="0"
+                        onclick="goodComment($answerModel.getAnswerId(),$uid);">
+                      $answerModel.getGoodCount()
+                  </span>
+                </span>
+                <span class="badComment">
+                <i class="icon-thumbs-down"></i>
+                <span id="J_badComment_$answerModel.getAnswerId()" data-ischoose="0"
+                      onclick="badComment($answerModel.getAnswerId(),$uid);">
+                    $answerModel.getBadCount()
+                </span>
+                    </span>
+            </div>
+            <div class="span11">
+
+                <div>
+                    <span class="qustionContent"> <i
+                            class="icon-comment"></i>
+                        #if($answerModel.getAnswerUser().getDisplayName())
+                            $answerModel.getAnswerUser().getDisplayName()
+                        #else
+                            $answerModel.getAnswerUser().getName()
+                        #end
+                    </span>
+                    <span class="answerTime" style="float:right;">
+                     #if($questionModel.getQuestionUser().getId() == $uid)
+                         <i class="icon-pencil"></i>  <a href="#editAnswer$answerModel.getAnswerId()"
+                                                         data-toggle="modal">修改</a>
+                          <i class="icon-remove"></i> <a href="#delAnswer$answerModel.getAnswerId()"
+                                                         data-toggle="modal"> 删除 </a>
+                     #end
+                        <i class=" icon-time"></i>  回答于 $simpleDateFormat.format($answerModel.getCreateTime())</span>
+                </div>
+
+                <span class="answerContent"> $answerModel.getAnswerContent()</span>
+            </div>
+        </div>
+        <hr class="dotline"/>
+
+        #if($questionModel.getQuestionUser().getId() == $uid)
+            <!-- 弹出浮层： 修改答案 开始 -->
+            <div id="editAnswer$answerModel.getAnswerId()" class="modal hide fade" tabindex="-1" role="dialog"
+                 aria-labelledby="myModalLabel"
+                 aria-hidden="true">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4>修改答案</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-default" method="post" action="">
+                        <input type="hidden" name="action" value="answerAction"/>
+                        <input type="hidden" name="userId" value="$uid"/>
+                        <input type="hidden" name="answerId" value="$answerModel.getAnswerId()"/>
+                        $csrfToken.uniqueHiddenField
+                        <p>答案描述：</p>
+                        <textarea rows="3" cols="20" class="span7 font-family" name="content" required="required"
+                                  autocomplete="off"
+                                >$answerModel.getAnswerContent()</textarea>
+                </div>
+                <div class="modal-footer">
+                    <input class="btn btn-primary font-family" type="submit" value="提交答案"
+                           name="event_submit_do_edit_answer">
+                    <button class="btn font-family" data-dismiss="modal">取消</button>
+                    </form>
+                    <!--   -->
+                </div>
+            </div>
+            <!-- 弹出浮层： 修改答案 结束-->
+
+            <!-- 弹出浮层： 删除答案 开始 -->
+            <div id="delAnswer$answerModel.getAnswerId()" class="modal hide fade" tabindex="-1" role="dialog"
+                 aria-labelledby="myModalLabel"
+                 aria-hidden="true">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4>删除答案</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-default" method="post" action="">
+                        <input type="hidden" name="action" value="answerAction"/>
+                        <input type="hidden" name="userId" value="$uid"/>
+                        <input type="hidden" name="answerId" value="$answerModel.getAnswerId()"/>
+                        <input type="hidden" name="questionId" value="$questionModel.getQuestionIdId()"/>
+                        $csrfToken.uniqueHiddenField
+                        <p>你确定要删除答案吗？</p>
+                </div>
+                <div class="modal-footer">
+                    <input class="btn btn-primary font-family" type="submit" value="删除答案"
+                           name="event_submit_do_del_answer">
+                    <button class="btn font-family" data-dismiss="modal">取消</button>
+                    </form>
+                    <!--   -->
+                </div>
+            </div>
+            <!-- 弹出浮层： 修改答案 结束-->
+        #end
+
+    #end
+</div>
+
+
+#if($info)
+<div class="alert">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Warning!</strong> $info.
+</div>
+#end
+
+<!-- 我要回答  -->
+回答：
+<div id="goToAnswer" class="addAnswer">
+    <form class="form-default" method="post" action="">
+        <input type="hidden" name="action" value="answerAction"/>
+        <input type="hidden" name="questionId" value="$questionModel.getQuestionId()"/>
+        <input type="hidden" name="userId" value="$uid"/>
+        $csrfToken.uniqueHiddenField
+        <p><textarea rows="5" name="content" required="required" maxlength="1024" autocomplete="off"
+                     class="span8 font-family"></textarea></p>
+
+        <div class="gotoright">
+            <input class="btn success font-family" type="submit" value="添加答案"
+                   name="event_submit_do_add_answer">
+        </div>
+    </form>
+</div>
+#if($NoLogin)
+<div id="loginInfo">
+    <div class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" onclick="loginInfo()"
+                    aria-hidden="true">&times;</button>
+                       <br />
+        </div>
+        <div class="modal-body">
+            <p align="center">您还没有登录，请先<a href="login.htm">登录</a>。</p>
+
+            <div class="modal-footer">
+                <button class="btn font-family" data-dismiss="modal" onclick="loginInfo();">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+#end
+
+
+
+
+
+
+<!-- 弹出浮层： 修改问题 开始 -->
+<div id="editQuestion" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 id="myModalLabel">修改问题</h4>
+    </div>
+    <div class="modal-body">
+        <form id="" class="form-default" method="post" action="">
+            <input type="hidden" name="action" value="questionAction"/>
+            <input type="hidden" name="questionId" value="$questionModel.getQuestionId()"/>
+            $csrfToken.uniqueHiddenField
+            <p>问题描述：</p>
+            <textarea rows="3" class="span7 font-family" name="content" required="required" autocomplete="off"
+                    >$questionModel.getQuestionContent()</textarea>
+
+            <p>问题分类：</p>
+            <select class="font-family" name="categoryId">
+                #foreach($category in $categoryList)
+                    #if($category.id == $questionModel.categoryId)
+                        <option value="$category.id" selected="true">$category.name</option>
+                    #else
+                        <option value="$category.id">$category.name</option>
+                    #end
+
+                #end
+            </select>
+    </div>
+    <div class="modal-footer">
+        <input class="btn btn-primary font-family" id="modal-submit" type="submit" value="提交问题"
+               name="event_submit_do_edit_question">
+        <button class="btn font-family" data-dismiss="modal">取消</button>
+        </form>
+        <!-- $insertQuestionResult  -->
+
+    </div>
+</div>
+<!-- 弹出浮层： 修改问题 结束-->
+
+
+
+
+
+
+

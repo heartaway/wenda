@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "http://toolkit.alibaba-inc.com/dtd/log4j/log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" threshold="null" debug="null">
+    <!-- ===================================================================== -->
+    <!--  appender definitions                                                 -->
+    <!-- ===================================================================== -->
+    <appender name="PROJECT" class="com.alibaba.common.logging.spi.log4j.DailyRollingFileAppender">
+        <param name="file" value="/home/admin/logs/wenda/wenda.log"/>
+        <param name="append" value="true"/>
+        <param name="encoding" value="UTF-8"/>
+        <param name="threshold" value="info"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d [%X{requestURIWithQueryString}] %-5p %C - %m%n"/>
+        </layout>
+    </appender>
+    <appender name="FILTER" class="com.alibaba.common.logging.spi.log4j.DailyRollingFileAppender">
+        <param name="file" value="/home/admin/logs/wenda/wenda-filter.log"/>
+        <param name="append" value="true"/>
+        <param name="encoding" value="UTF-8"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p %C - %m%n"/>
+        </layout>
+		
+    </appender>
+    <appender name="STDERR" class="com.alibaba.common.logging.spi.log4j.DailyRollingFileAppender">
+        <param name="file" value="/home/admin/logs/wenda/wenda-STDERR.log"/>
+        <param name="append" value="true"/>
+        <param name="encoding" value="UTF-8"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+    </appender>
+    <appender name="ConfigServer" class="com.alibaba.common.logging.spi.log4j.FileAppender">
+        <param name="file" value="/home/admin/logs/wenda/wenda-configServer.log"/>
+        <param name="append" value="true"/>
+        <param name="encoding" value="UTF-8"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d [%X{requestURIWithQueryString}] %-5p %C - %m%n"/>
+        </layout>
+    </appender>
+    <appender name="MAIN" class="com.alibaba.common.logging.spi.log4j.DailyRollingFileAppender">
+        <param name="file" value="/home/admin/logs/wenda/wenda-main.log"/>
+        <param name="append" value="true"/>
+        <param name="encoding" value="UTF-8"/>
+        <param name="threshold" value="info"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p %C - %m%n"/>
+        </layout>
+    </appender>
+
+    <!-- ===================================================================== -->
+    <!--  logger definition                                                    -->
+    <!-- ===================================================================== -->
+
+    <logger name="com.alibaba.webx.filter" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="FILTER"/>
+    </logger>
+    <logger name="STDERR" additivity="false">
+        <level value="WARN"/>
+        <appender-ref ref="STDERR"/>
+    </logger>
+    <logger name="com.taobao.session" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="ConfigServer"/>
+    </logger>
+    <logger name="com.taobao.taotest.qasystem">
+        <level value="INFO"/>
+        <appender-ref ref="MAIN"/>
+    </logger>
+    <!-- ===================================================================== -->
+    <!--  Root logger                                                          -->
+    <!-- ===================================================================== -->
+    <root>
+        <level value="info"/>
+        <appender-ref ref="PROJECT"/>
+    </root>
+</log4j:configuration>

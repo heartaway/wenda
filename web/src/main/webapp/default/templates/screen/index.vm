@@ -1,0 +1,259 @@
+#set($userId = $user.getId())
+#if(!$userId)
+    #set($uid = "null")
+#else
+    #set($uid =$!userId )
+#end
+
+#if(!$allQuestionModelsList || $allQuestionModelsList.size() == 0)
+<span class="text-info">还没有人开始提问，快来成为淘测试问答第一人吧。@_@</span>
+#else
+<div class="alert alert-success" >
+    <span class="text-info">淘测试问答 为您解惑答疑。^_^</span>
+</div>
+
+#end
+
+
+
+
+#foreach($questionModel in $allQuestionModelsList)
+<div class="row-fluid">
+    <div class="span1">
+        <span class="attentionTag">关注人数<br/><span
+                id="J_attention_label_$questionModel.getQuestionId()"> $questionModel.getAttentionCount()</span></span>
+    </div>
+    <div class="span11">
+
+        <div class="">
+            <span class="user muted">
+                #if($questionModel.getQuestionUser().getDisplayName())
+                $questionModel.getQuestionUser().getDisplayName()
+                #else
+                    $questionModel.getQuestionUser().getName()
+                #end
+
+            </span>
+            <span class="askTime muted" style="float:right;"><i
+                    class=" icon-time"></i>  提问于$simpleDateFormat.format($questionModel.getCreateTime())</span>
+        </div>
+        <a href="questionDetail.vm?questionId=$questionModel.getQuestionId()&userId=$uid">
+            <span class="qustionContent"> $questionModel.getQuestionContent()</span>
+        </a>
+
+
+    </div>
+</div>
+
+
+<div class="questionDetailTag">
+    <a href="questionDetail.vm?questionId=$questionModel.getQuestionId()&userId=$uid#goToAnswer"
+       class="label label-success anwserTag">
+        <label>我来回答   $questionModel.getAnswerCount()</label>
+    </a>
+    #if($questionModel.getIsAttention())
+        <a class="label label-important anwserTag">
+            <label id="J_attention_$questionModel.getQuestionId()" data-isattention="1"
+                   onclick="attention($questionModel.getQuestionId(),$uid);">取消关注  $questionModel.getAttentionCount()</label>
+        </a>
+    #else
+        <a class="label label-important anwserTag">
+            <label id="J_attention_$questionModel.getQuestionId()" data-isattention="0"
+                   onclick="attention($questionModel.getQuestionId(),$uid);">我要关注  $questionModel.getAttentionCount()</label>
+        </a>
+    #end
+
+
+    <a class="label label-warning anwserTag">
+        <label id="J_sameAsk_$questionModel.getQuestionId()" data-ischoose="0"
+               onclick="sameAsk($questionModel.getQuestionId(),$uid);">$questionModel.getSameAskCount()
+            人同问</label>
+    </a>
+    <br/>
+</div>
+<hr class="dotline"/>
+#end
+
+
+#if($paging)
+<div class="pagination pagination-right ">
+    <ul class="">
+        #set ($prepage=$pageIndex - 1)
+        #set($preTwoPage=$pageIndex - 2)
+        #set($nextpage=$pageIndex + 1)
+        #set($nextTwoPage=$pageIndex + 2)
+        #set($lastTwoPage=$totalPage - 1)
+        #set($difference = $totalPage - $pageIndex)
+
+        #if($totalPage>10)
+            <!--    page > 10 -->
+            #if($pageIndex ==1)
+                <li class="disabled"><a>上一页</a></li>
+                <li class="disabled"><a>$pageIndex</a></li>
+                <li><a href="index.htm?pageIndex=$nextpage&userId=$uid">$nextpage</a></li>
+                <li><a href="index.htm?pageIndex=$nextTwoPage&userId=$uid">$nextTwoPage</a></li>
+                <li class="disabled"><a>...</a></li>
+                <li><a href="index.htm?pageIndex=$lastTwoPage&userId=$uid">$lastTwoPage</a></li>
+                <li><a href="index.htm?pageIndex=$totalPage&userId=$uid">$totalPage</a></li>
+                <li><a href="index.htm?pageIndex=$nextpage&userId=$uid">下一页</a></li>
+
+            #elseif( $pageIndex >5 && $difference>=5)
+                <li><a href="index.htm?pageIndex=$prepage&userId=$uid">上一页</a></li>
+                <li><a href="index.htm?pageIndex=1&userId=$uid">1</a></li>
+                <li><a href="index.htm?pageIndex=2&userId=$uid">2</a></li>
+                <li class="disabled"><a>...</a></li>
+                <li><a href="index.htm?pageIndex=$preTwoPage&userId=$uid">$preTwoPage</a></li>
+                <li><a href="index.htm?pageIndex=$prepage&userId=$uid">$prepage</a></li>
+                <li class="disabled"><a>$pageIndex</a></li>
+                <li><a href="index.htm?pageIndex=$nextpage&userId=$uid">$nextpage</a></li>
+                <li><a href="index.htm?pageIndex=$nextTwoPage&userId=$uid">$nextTwoPage</a></li>
+                <li class="disabled"><a>...</a></li>
+                <li><a href="index.htm?pageIndex=$lastTwoPage&userId=$uid">$lastTwoPage</a></li>
+                <li><a href="index.htm?pageIndex=$totalPage&userId=$uid">$totalPage</a></li>
+                <li><a href="index.htm?pageIndex=$nextpage&userId=$uid">下一页</a></li>
+
+            #elseif($pageIndex ==5)
+                <li><a href="index.htm?pageIndex=$prepage&userId=$uid">上一页</a></li>
+                <li><a href="index.htm?pageIndex=1&userId=$uid">1</a></li>
+                <li><a href="index.htm?pageIndex=2&userId=$uid">2</a></li>
+                <li><a href="index.htm?pageIndex=3&userId=$uid">3</a></li>
+                <li><a href="index.htm?pageIndex=4&userId=$uid">4</a></li>
+                <li class="disabled"><a>$pageIndex</a></li>
+                <li><a href="index.htm?pageIndex=$nextpage&userId=$uid">$nextpage</a></li>
+                <li><a href="index.htm?pageIndex=$nextTwoPage&userId=$uid">$nextTwoPage</a></li>
+                <li class="disabled"><a>...</a></li>
+                <li><a href="index.htm?pageIndex=$lastTwoPage&userId=$uid">$lastTwoPage</a></li>
+                <li><a href="index.htm?pageIndex=$totalPage&userId=$uid">$totalPage</a></li>
+                <li><a href="index.htm?pageIndex=$nextpage&userId=$uid">下一页</a></li>
+
+            #elseif($pageIndex == 4)
+                <li><a href="index.htm?pageIndex=$prepage&userId=$uid">上一页</a></li>
+                <li><a href="index.htm?pageIndex=1&userId=$uid">1</a></li>
+                <li><a href="index.htm?pageIndex=2&userId=$uid">2</a></li>
+                <li><a href="index.htm?pageIndex=3&userId=$uid">3</a></li>
+                <li class="disabled"><a>$pageIndex</a></li>
+                <li><a href="index.htm?pageIndex=$nextpage&userId=$uid">$nextpage</a></li>
+                <li><a href="index.htm?pageIndex=$nextTwoPage&userId=$uid">$nextTwoPage</a></li>
+                <li class="disabled"><a>...</a></li>
+                <li><a href="index.htm?pageIndex=$lastTwoPage&userId=$uid">$lastTwoPage</a></li>
+                <li><a href="index.htm?pageIndex=$totalPage&userId=$uid">$totalPage</a></li>
+                <li><a href="index.htm?pageIndex=$nextpage&userId=$uid">下一页</a></li>
+
+            #elseif($pageIndex == 3)
+                <li><a href="index.htm?pageIndex=$prepage&userId=$uid">上一页</a></li>
+                <li><a href="index.htm?pageIndex=1&userId=$uid">1</a></li>
+                <li><a href="index.htm?pageIndex=2&userId=$uid">2</a></li>
+                <li class="disabled"><a>$pageIndex</a></li>
+                <li><a href="index.htm?pageIndex=$nextpage&userId=$uid">$nextpage</a></li>
+                <li><a href="index.htm?pageIndex=$nextTwoPage&userId=$uid">$nextTwoPage</a></li>
+                <li class="disabled"><a>...</a></li>
+                <li><a href="index.htm?pageIndex=$lastTwoPage&userId=$uid">$lastTwoPage</a></li>
+                <li><a href="index.htm?pageIndex=$totalPage&userId=$uid">$totalPage</a></li>
+                <li><a href="index.htm?pageIndex=$nextpage&userId=$uid">下一页</a></li>
+
+            #elseif($pageIndex ==2)
+                <li><a href="index.htm?pageIndex=$prepage&userId=$uid">上一页</a></li>
+                <li><a href="index.htm?pageIndex=1&userId=$uid">1</a></li>
+                <li class="disabled"><a>$pageIndex</a></li>
+                <li><a href="index.htm?pageIndex=$nextpage&userId=$uid">$nextpage</a></li>
+                <li><a href="index.htm?pageIndex=$next2pag&userId=$uid">$nextTwoPage</a></li>
+                <li class="disabled"><a>...</a></li>
+                <li><a href="index.htm?pageIndex=$lastTwoPage&userId=$uid">$lastTwoPage</a></li>
+                <li><a href="index.htm?pageIndex=$totalPage&userId=$uid">$totalPage</a></li>
+                <li><a href="index.htm?pageIndex=$nextpage&userId=$uid">下一页</a></li>
+
+            #elseif( $pageIndex >5 && $difference == 4)
+                <li><a href="index.htm?pageIndex=$prepage&userId=$uid">上一页</a></li>
+                <li><a href="index.htm?pageIndex=1&userId=$uid">1</a></li>
+                <li><a href="index.htm?pageIndex=2&userId=$uid">2</a></li>
+                <li class="disabled"><a>...</a></li>
+                <li><a href="index.htm?pageIndex=$preTwoPage&userId=$uid">$preTwoPage</a></li>
+                <li><a href="index.htm?pageIndex=$prepage&userId=$uid">$prepage</a></li>
+                <li class="disabled"><a>$pageIndex</a></li>
+                <li><a href="index.htm?pageIndex=$nextpage&userId=$uid">$nextpage</a></li>
+                <li><a href="index.htm?pageIndex=$nextTwoPage&userId=$uid">$nextTwoPage</a></li>
+                <li><a href="index.htm?pageIndex=$lastTwoPage&userId=$uid">$lastTwoPage</a></li>
+                <li><a href="index.htm?pageIndex=$totalPage&userId=$uid">$totalPage</a></li>
+                <li><a href="index.htm?pageIndex=$nextpage&userId=$uid">下一页</a></li>
+
+            #elseif($pageIndex >5 && $difference == 3)
+                <li><a href="index.htm?pageIndex=$prepage&userId=$uid">上一页</a></li>
+                <li><a href="index.htm?pageIndex=1&userId=$uid">1</a></li>
+                <li><a href="index.htm?pageIndex=2&userId=$uid">2</a></li>
+                <li class="disabled"><a>...</a></li>
+                <li><a href="index.htm?pageIndex=$preTwoPage&userId=$uid">$preTwoPage</a></li>
+                <li><a href="index.htm?pageIndex=$prepage&userId=$uid">$prepage</a></li>
+                <li class="disabled"><a>$pageIndex</a></li>
+                <li><a href="index.htm?pageIndex=$nextpage&userId=$uid">$nextpage</a></li>
+                <li><a href="index.htm?pageIndex=$nextTwoPage&userId=$uid">$nextTwoPage</a></li>
+                <li><a href="index.htm?pageIndex=$totalPage&userId=$uid">$totalPage</a></li>
+                <li><a href="index.htm?pageIndex=$nextpage&userId=$uid">下一页</a></li>
+
+            #elseif($pageIndex >5 && $difference == 2)
+                <li><a href="index.htm?pageIndex=$prepage&userId=$uid">上一页</a></li>
+                <li><a href="index.htm?pageIndex=1&userId=$uid">1</a></li>
+                <li><a href="index.htm?pageIndex=2&userId=$uid">2</a></li>
+                <li class="disabled"><a>...</a></li>
+                <li><a href="index.htm?pageIndex=$preTwoPage&userId=$uid">$preTwoPage</a></li>
+                <li><a href="index.htm?pageIndex=$prepage&userId=$uid">$prepage</a></li>
+                <li class="disabled"><a>$pageIndex</a></li>
+                <li><a href="index.htm?pageIndex=$nextpage&userId=$uid">$nextpage</a></li>
+                <li><a href="index.htm?pageIndex=$totalPage&userId=$uid">$totalPage</a></li>
+                <li><a href="index.htm?pageIndex=$nextpage&userId=$uid">下一页</a></li>
+
+            #elseif($pageIndex >5 && $difference == 1)
+                <li><a href="index.htm?pageIndex=$prepage&userId=$uid">上一页</a></li>
+                <li><a href="index.htm?pageIndex=1&userId=$uid">1</a></li>
+                <li><a href="index.htm?pageIndex=2&userId=$uid">2</a></li>
+                <li class="disabled"><a>...</a></li>
+                <li><a href="index.htm?pageIndex=$preTwoPage&userId=$uid">$preTwoPage</a></li>
+                <li><a href="index.htm?pageIndex=$prepage&userId=$uid">$prepage</a></li>
+                <li class="disabled"><a>$pageIndex</a></li>
+                <li><a href="index.htm?pageIndex=$nextpage&userId=$uid">$nextpage</a></li>
+                <li><a href="index.htm?pageIndex=$nextpage&userId=$uid">下一页</a></li>
+
+            #elseif($pageIndex == $totalPage)
+                <li><a href="index.htm?pageIndex=$prepage&userId=$uid">上一页</a></li>
+                <li><a href="index.htm?pageIndex=1&userId=$uid">1</a></li>
+                <li><a href="index.htm?pageIndex=2&userId=$uid">2</a></li>
+                <li class="disabled"><a>...</a></li>
+                <li><a href="index.htm?pageIndex=$preTwoPage&userId=$uid">$preTwoPage</a></li>
+                <li><a href="index.htm?pageIndex=$prepage&userId=$uid">$prepage</a></li>
+                <li class="disabled"><a>$pageIndex</a></li>
+                <li class="disabled"><a>下一页</a></li>
+            #end
+
+        #else
+            <!--   1< page < 11 -->
+            #if( $pageIndex ==1)
+                <li class="disabled"><a>上一页</a></li>
+                <li class="disabled"><a>$pageIndex</a></li>
+                #foreach($index in [2..$totalPage])
+                    <li><a href="index.htm?pageIndex=$index&userId=$uid">$index</a></li>
+                #end
+                <li><a href="index.htm?pageIndex=$nextpage&userId=$uid">下一页</a></li>
+
+            #elseif( $pageIndex ==$totalPage)
+                <li><a href="index.htm?pageIndex=$prepage&userId=$uid">上一页</a></li>
+                #foreach($index in [1..$lastTwoPage])
+                    <li><a href="index.htm?pageIndex=$index&userId=$uid">$index</a></li>
+                #end
+                <li class="disabled"><a>$pageIndex</a></li>
+                <li class="disabled"><a>下一页</a></li>
+
+            #elseif( $pageIndex <$totalPage && $pageIndex>1)
+                <li><a href="index.htm?pageIndex=$prepage&userId=$uid">上一页</a></li>
+                #foreach($index in [1..$totalPage])
+                    #if($index == $pageIndex)
+                        <li class="disabled"><a>$pageIndex</a></li>
+                    #else
+                        <li><a href="index.htm?pageIndex=$index&userId=$uid">$index</a></li>
+                    #end
+                #end
+                <li><a href="index.htm?pageIndex=$nextpage&userId=$uid">下一页</a></li>
+            #end
+        #end
+    </ul>
+</div>
+#end
+

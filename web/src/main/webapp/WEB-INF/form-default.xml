@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:services="http://www.alibaba.com/schema/services"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns="http://www.alibaba.com/schema/services/form/validators"
+             xmlns:fm-validators="http://www.alibaba.com/schema/services/form/validators"
+             xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.alibaba.com/schema/services http://localhost:8080/schema/services.xsd
+        http://www.springframework.org/schema/beans http://localhost:8080/schema/www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.alibaba.com/schema/services/form/validators http://localhost:8080/schema/services-form-validators.xsd ">
+    <services:form postOnlyByDefault="true">
+        <services:group name="csrfCheck">
+            <services:field name="csrfToken">
+                <csrf-validator>
+                    <message>提交的数据已过期</message>
+                </csrf-validator>
+            </services:field>
+        </services:group>
+
+        <services:group name="setStyle">
+            <services:field name="scope" displayName=" 样式作用的范围 ">
+                <required-validator>
+                    <message>${displayName}不能为空</message>
+                </required-validator>
+                <regexp-validator pattern="^(body|#hd|#ft|#kissy-\d+)$">
+                    <message>${displayName}值错误</message>
+                </regexp-validator>
+            </services:field>
+            <services:field name="pageId" displayName=" 指定页面 ">
+                <number-validator>
+                    <message>${displayName}格式错误</message>
+                </number-validator>
+            </services:field>
+            <services:field name="color" displayName=" 背景色 ">
+                <regexp-validator pattern="^#[a-fA-F0-9]{1,6}$">
+                    <message>${displayName}格式错误</message>
+                </regexp-validator>
+            </services:field>
+            <services:field name="backgroundRepeat" displayName=" 背景图片平铺方式 ">
+                <regexp-validator pattern="^(repeat|repeat-x|repeat-y|no-repeat)$">
+                    <message>${displayName}格式错误</message>
+                </regexp-validator>
+            </services:field>
+            <services:field name="backgroundPosition" displayName=" 背景图片对齐方式 ">
+                <regexp-validator pattern="^(left|center|right)$">
+                    <message>${displayName}格式错误</message>
+                </regexp-validator>
+            </services:field>
+            <services:field name="backgroundImg" displayName=" 背景图片 ">
+                <uploaded-file-validator
+                        contentType="image/gif, image/jpeg, image/pjpeg, image/jpg, image/png, image/x-png"
+                        maxSize="102400">
+                    <message>背景图必须是jpg,jpeg,png或者gif格式,并且不能超过100k</message>
+                </uploaded-file-validator>
+                <custom-error id="imgFormatError">
+                    <message>背景图必须是jpg,jpeg,png或者gif格式</message>
+                </custom-error>
+                <custom-error id="noFile">
+                    <message>没有可上传的图片，请选择文件上传！</message>
+                </custom-error>
+                <custom-error id="commonError">
+                    <message>设置样式失败！${errMsg}</message>
+                </custom-error>
+            </services:field>
+        </services:group>
+        <services:group name="setFreeStyle">
+            <services:field name="cssCode" displayName=" 样式代码 ">
+                <string-byte-length-validator maxLength="1024">
+                    <message>${displayName}不能超过1024个字节</message>
+                </string-byte-length-validator>
+                <custom-error id="formatError">
+                    <message>格式错误：${info}</message>
+                </custom-error>
+                <custom-error id="illegalCss">
+                    <message>非法css：${info}</message>
+                </custom-error>
+                <custom-error id="commonError">
+                    <message>设置样式失败！</message>
+                </custom-error>
+            </services:field>
+            <services:field name="pageId" displayName=" 指定页面 ">
+                <number-validator>
+                    <message>${displayName}格式错误</message>
+                </number-validator>
+            </services:field>
+        </services:group>
+        <services:group name="siteInfoGroup">
+            <services:field name="name" displayName="店铺名称">
+                <string-byte-length-validator maxLength="32">
+                    <message>${displayName}不能超过32个字节</message>
+                </string-byte-length-validator>
+                <required-validator>
+                    <message>${displayName}不能为空</message>
+                </required-validator>
+            </services:field>
+            <services:field name="picUrl" displayName="店铺标识">
+                <custom-error id="picUrlError">
+                    <message>${displayName}格式错误</message>
+                </custom-error>
+            </services:field>
+            <services:field name="category" displayName="店铺类目">
+                <required-validator>
+                    <message>${displayName}不能为空</message>
+                </required-validator>
+                <number-validator>
+                    <message>${displayName}格式错误</message>
+                </number-validator>
+            </services:field>
+            <services:field name="desc" displayName="店铺简介">
+                <required-validator>
+                    <message>${displayName}不能为空</message>
+                </required-validator>
+                <string-byte-length-validator maxLength="64">
+                    <message>${displayName}不能超过64个字节</message>
+                </string-byte-length-validator>
+            </services:field>
+            <services:field name="businessType" displayName="经营类型">
+                <required-validator>
+                    <message>${displayName}不能为空</message>
+                </required-validator>
+            </services:field>
+            <services:field name="address" displayName="联系地址">
+                <required-validator>
+                    <message>${displayName}不能为空</message>
+                </required-validator>
+            </services:field>
+            <services:field name="zipCode" displayName="邮政编码">
+                <required-validator>
+                    <message>${displayName}不能为空</message>
+                </required-validator>
+                <number-validator>
+                    <message>${displayName}格式错误</message>
+                </number-validator>
+            </services:field>
+            <services:field name="detail" displayName="店铺介绍">
+                <required-validator>
+                    <message>${displayName}不能为空</message>
+                </required-validator>
+                <string-byte-length-validator maxLength="2048">
+                    <message>${displayName}不能超过2048个字节</message>
+                </string-byte-length-validator>
+            </services:field>
+            <services:field name="supplyMethod" displayName="主要货源">
+                <required-validator>
+                    <message>${displayName}不能为空</message>
+                </required-validator>
+            </services:field>
+            <services:field name="hasRealShop" displayName="是否有实体店">
+                <required-validator>
+                    <message>${displayName}不能为空</message>
+                </required-validator>
+                <regexp-validator pattern="^(false|true)$">
+                    <message>${displayName}格式错误</message>
+                </regexp-validator>
+            </services:field>
+            <services:field name="realShopAddress" displayName="实体店地址">
+                <custom-error id="realShopAddressError">
+                    <message>${displayName}需要填写</message>
+                </custom-error>
+            </services:field>
+            <services:field name="hasWarehouse" displayName="是否有工厂或仓库">
+                <required-validator>
+                    <message>${displayName}不能为空</message>
+                </required-validator>
+                <regexp-validator pattern="^(false|true)$">
+                    <message>${displayName}格式错误</message>
+                </regexp-validator>
+            </services:field>
+            <services:field name="warehouseAddress" displayName="工厂或者仓库地址">
+                <custom-error id="warehouseAddressError">
+                    <message>${displayName}需要填写</message>
+                </custom-error>
+            </services:field>
+        </services:group>
+        <services:group name="setPageSetting">
+            <services:field name="pageId" displayName="页面ID">
+                <number-validator>
+                    <message>${displayName}格式错误</message>
+                </number-validator>
+                <custom-error id="pageNotExist">
+                    <message>页面不存在</message>
+                </custom-error>
+            </services:field>
+            <services:field name="pageDemoId" displayName="页面原型ID">
+                <number-validator>
+                    <message>${displayName}格式错误</message>
+                </number-validator>
+                <custom-error id="pageNotExist">
+                    <message>页面原型不存在</message>
+                </custom-error>
+            </services:field>
+            <services:field name="prototypeId" displayName="设计师页面原型ID">
+                <number-validator>
+                    <message>${displayName}格式错误</message>
+                </number-validator>
+                <custom-error id="pageNotExist">
+                    <message>页面原型不存在</message>
+                </custom-error>
+            </services:field>
+            <services:field name="pageUrl" displayName="页面Url">
+            </services:field>
+            <services:field name="pageName" displayName="页面名称">
+                <string-byte-length-validator maxLength="20">
+                    <message>${displayName}不能超过10个字</message>
+                </string-byte-length-validator>
+                <custom-error id="commonMsg">
+                    <message>${commonMsg}</message>
+                </custom-error>
+            </services:field>
+            <services:field name="add" displayName="页面操作类型">
+                <regexp-validator pattern="^(false|true)$">
+                    <message>${displayName}格式错误</message>
+                </regexp-validator>
+            </services:field>
+            <services:field name="pageType" displayName="页面类型">
+                <number-validator>
+                    <message>${displayName}格式错误</message>
+                </number-validator>
+            </services:field>
+        </services:group>
+        <services:group name="backupInfo">
+            <services:field name="name" displayName="备份名">
+                <required-validator>
+                    <message>${displayName}不能为空</message>
+                </required-validator>
+                <string-byte-length-validator maxLength="20">
+                    <message>${displayName}不能超过20个字节</message>
+                </string-byte-length-validator>
+            </services:field>
+            <services:field name="comment" displayName="备注">
+                <required-validator>
+                    <message>${displayName}不能为空</message>
+                </required-validator>
+                <string-byte-length-validator maxLength="100">
+                    <message>${displayName}不能超过100个字节</message>
+                </string-byte-length-validator>
+            </services:field>
+            <services:field name="tid" displayName="模板id">
+                <number-validator>
+                    <message>${displayName}格式错误</message>
+                </number-validator>
+            </services:field>
+            <services:field name="existInstId" displayName="已经存在的模板实例id">
+                <number-validator>
+                    <message>${displayName}格式错误</message>
+                </number-validator>
+            </services:field>
+        </services:group>
+        <services:group name="upPageBanner">
+            <services:field name="banner" displayName="背景图 ">
+                <uploaded-file-validator
+                        contentType="image/gif, image/jpeg, image/pjpeg, image/jpg, image/png, image/x-png"
+                        maxSize="102400">
+                    <message>背景图必须是jpg,jpeg,png或者gif格式,并且不能超过100k</message>
+                </uploaded-file-validator>
+                <custom-error id="imgFormatError">
+                    <message>背景图必须是jpg,jpeg,png或者gif格式</message>
+                </custom-error>
+                <custom-error id="noFile">
+                    <message>没有可上传的图片，请选择文件上传！</message>
+                </custom-error>
+            </services:field>
+        </services:group>
+    </services:form>
+</beans:beans>
+

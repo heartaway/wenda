@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="User">
+        <typeAlias alias="UserDO" type="com.taobao.taotest.qasystem.biz.domain.UserDO"/>
+
+
+    <resultMap id="userDO" class="UserDO">
+        <result column="id" property="id"/>
+        <result column="old_id" property="oldId"/>
+        <result column="name" property="name"/>
+        <result column="display_name" property="displayName"/>
+        <result column="password" property="password"/>
+        <result column="actived" property="actived"/>
+        <result column="email" property="email"/>
+        <result column="admin" property="admin"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
+
+
+    <sql id="UserDAO.selectorAllInfo">
+        select id,old_id,name,display_name,password,actived,email,admin,created_at,updated_at from users
+    </sql>
+
+    <select id="UserDAO.queryById" parameterClass="java.lang.Integer" resultMap="userDO">
+        <include refid="UserDAO.selectorAllInfo"/>
+        where id=#value#
+    </select>
+
+    <select id="UserDAO.queryByName"   parameterClass="java.lang.String" resultMap="userDO">
+        <include refid="UserDAO.selectorAllInfo"/>
+        where name =#value#
+    </select>
+
+
+</sqlMap>
+

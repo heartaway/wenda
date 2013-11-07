@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="GoodBad">
+    <typeAlias alias="GoodBadDO" type="com.taobao.taotest.qasystem.biz.domain.GoodBadDO"/>
+
+    <resultMap id="goodBadDO" class="GoodBadDO">
+        <result column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="answer_id" property="answerId"/>
+        <result column="good" property="good"/>
+        <result column="bad" property="bad"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+    </resultMap>
+
+
+    <sql id="GoodBadDAO.selectorAllInfo">
+        select id,user_id,answer_id,good,bad,gmt_create,gmt_modified from qa_goodbad
+	</sql>
+
+    <select id="GoodBadDAO.queryByAnswerIdAndUserId" parameterClass="java.util.HashMap" resultMap="goodBadDO">
+        <include refid="GoodBadDAO.selectorAllInfo"/>
+        where answer_id=#answerId# and user_id=#userId#
+    </select>
+
+    <insert id="GoodBadDAO.insert" parameterClass="GoodBadDO">
+        INSERT INTO qa_goodbad
+        (user_id,answer_id,good,bad,gmt_create,gmt_modified)
+        VALUES
+        (#userId#,#answerId#,#good#,#bad#,now(), now())
+        <selectKey resultClass="Integer">
+          select last_insert_id() as id from qa_goodbad limit 1
+        </selectKey>
+    </insert>
+
+
+</sqlMap>

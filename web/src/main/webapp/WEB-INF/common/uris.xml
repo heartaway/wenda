@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:services="http://www.alibaba.com/schema/services"
+             xmlns:uris="http://www.alibaba.com/schema/services/uris"
+             xmlns="http://www.alibaba.com/schema/services/uris"
+             xmlns:uri-interceptors="http://www.alibaba.com/schema/services/uris/interceptors"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:p="http://www.springframework.org/schema/p"
+             xsi:schemaLocation="
+        http://www.alibaba.com/schema/services http://localhost:8080/schema/services.xsd
+        http://www.alibaba.com/schema/services/uris http://localhost:8080/schema/services-uris.xsd
+        http://www.alibaba.com/schema/services/uris/interceptors http://localhost:8080/schema/services-uris-interceptors.xsd
+        http://www.springframework.org/schema/beans http://localhost:8080/schema/www.springframework.org/schema/beans/spring-beans.xsd
+    ">
+
+    <services:uris>
+        <!-- ================================================================ -->
+        <!-- Server Level： 外部server。                                      -->
+        <!--                                                                  -->
+        <!-- 使用方法： link.getURI('path')                                   -->
+        <!-- ================================================================ -->
+        <turbine-uri id="assetsModule" exposed="true">
+            <uris:serverURI>http://${qasystem.assets.server}</uris:serverURI>
+            <componentPath>/apps/pamirsshop</componentPath>
+        </turbine-uri>
+
+        <uri id="loginServer" exposed="true">
+            <serverURI>https://login.${qasystem.domain.name}</serverURI>
+        </uri>
+
+        <uri id="memberServer" exposed="true">
+            <serverURI>http://member1.${qasystem.domain.name}</serverURI>
+        </uri>
+
+
+        <!-- ================================================================ -->
+        <!-- Server Level： java server。                                     -->
+        <!--                                                                  -->
+        <!-- 使用方法： 不能直接使用，只被其它URI继承。                         -->
+        <!-- ================================================================ -->
+        <uri id="rsServer"/>
+        <!--首页配置-->
+        <turbine-uri id="homeModule" exposed="true" extends="rsServer">
+            <componentPath>/</componentPath>
+        </turbine-uri>
+
+    </services:uris>
+
+</beans:beans>

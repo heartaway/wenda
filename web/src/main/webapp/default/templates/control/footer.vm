@@ -1,0 +1,50 @@
+<footer class="footer" >
+    <div class="container" align=center>
+
+    <ul class="footer-links">
+    <!--
+        <li>
+            #if($loginUser)
+                <a href="index.htm?userId=$loginUser.getId()">返回首页</a>
+            #else
+                <a href="index.htm">返回首页</a>
+            #end
+        </li>
+        <li>
+            <a href="http://www.taobaotest.com/blogs">博客</a>
+        </li>
+        <li>
+            <a href="http://www.taobaotest.com/notices">技术交流</a>
+        </li>
+        <li>
+            <a href="http://www.taobaotest.com/products">产品</a>
+        </li>
+        <li>
+            <a href="http://www.taobaotest.com/books">期刊下载</a>
+        </li>
+        <li>
+            <a href="http://www.taobaotest.com/abouts">关于我们</a>
+        </li>
+        <li>
+            <a href="http://www.taobaotest.com/suggests">意见反馈</a>
+        </li>
+        <li>
+            <a href="http://www.taobaotest.com/acc">无障碍</a>
+        </li>
+        -->
+    </ul>
+    <p class="copyright" >
+        浙ICP备09109183号-14 Copyright &copy; 2003-2013 TaobaoTesting.com 版权所有
+        <script src="http://s23.cnzz.com/stat.php?id=3684066&web_id=3684066&show=pic" language="JavaScript"></script>
+    </p>
+</div>
+</footer>
+
+<script type="text/javascript" src="assets/js/bootstrap-alert.js"></script>
+<script type="text/javascript" src="assets/js/bootstrap-modal.js"></script>
+<script type="text/javascript" src="assets/js/bootstrap-tooltip.js"></script>
+<script type="text/javascript" src="assets/js/bootstrap-transition.js"></script>
+<script type="text/javascript" src="assets/js/bootstrap-popover.js"></script>
+<script type="text/javascript" src="assets/js/jquery.js"></script>
+<script type="text/javascript" src="assets/js/bootstrap.js"></script>
+<script type="text/javascript" src="assets/js/bootstrap-qasystem.js"></script>

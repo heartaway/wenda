@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+"http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="Question">
+        <typeAlias alias="QuestionDO" type="com.taobao.taotest.qasystem.biz.domain.QuestionDO"/>
+        <typeAlias alias="PageDO" type="com.taobao.taotest.qasystem.biz.domain.PageDO"/>
+
+    <resultMap id="questionDO" class="QuestionDO">
+        <result column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="status" property="status"/>
+        <result column="content" property="content"/>
+        <result column="same_ask_count" property="sameAskCount"/>
+        <result column="top_answer_id" property="topAnswerId"/>
+        <result column="attention_count" property="attentionCount"/>
+        <result column="answer_count" property="answerCount"/>
+        <result column="features" property="features"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+    </resultMap>
+
+
+    <sql id="QuestionDAO.selectorAllInfo">
+        select id,user_id,status,content,category_id,top_answer_id,attention_count,answer_count,same_ask_count,features,gmt_create,gmt_modified from qa_questions
+    </sql>
+
+    <select id="QuestionDAO.queryById"
+            parameterClass="java.lang.Integer"
+            resultMap="questionDO">
+        <include refid="QuestionDAO.selectorAllInfo"/>
+        where id=#value#
+    </select>
+
+    <select id="QuestionDAO.queryListByUserId" parameterClass="java.lang.Integer" resultMap="questionDO">
+        <include refid="QuestionDAO.selectorAllInfo"/>
+        where user_id=#value#
+        <![CDATA[ order by gmt_create DESC ]]>
+    </select>
+
+    <select id="QuestionDAO.queryAllQuestionsCount" resultClass="java.lang.Integer">
+        select count(*) from  qa_questions
+    </select>
+
+    <select id="QuestionDAO.queryAllQuestions4Paging" parameterClass="PageDO" resultMap="questionDO">
+        select * from
+        (
+        <include refid="QuestionDAO.selectorAllInfo"/>
+        <![CDATA[ order by gmt_create DESC ]]>
+        ) t
+        limit #startRecord#,#pageSize#
+    </select>
+
+    <select id="QuestionDAO.queryUserQuestions4Paging" parameterClass="PageDO" resultMap="questionDO">
+        select * from
+        (
+        <include refid="QuestionDAO.selectorAllInfo"/>
+        where user_id=#intValue#
+        <![CDATA[ order by gmt_create DESC ]]>
+        ) t
+        limit #startRecord#,#pageSize#
+    </select>
+
+    <select id="QuestionDAO.queryPersonalAttentionQuestions4Paging" parameterClass="PageDO" resultMap="questionDO">
+        select * from
+        (
+        <include refid="QuestionDAO.selectorAllInfo"/>
+        where id in  (select question_id  from qa_attentions where user_id=#intValue#)
+        <![CDATA[ order by gmt_create DESC ]]>
+        ) t
+        limit #startRecord#,#pageSize#
+    </select>
+
+    <insert id="QuestionDAO.insert" parameterClass="QuestionDO">
+        INSERT INTO qa_questions
+        (user_id,status,content,category_id,same_ask_count,top_answer_id,attention_count,answer_count,features,gmt_create,gmt_modified)
+        VALUES
+        (#userId#,#status#, #content#,#categoryId#,#sameAskCount#,#topAnswerId#,#attentionCount#,#answerCount#,#features#,now(), now())
+        <selectKey resultClass="Integer">
+            select last_insert_id() as id from qa_questions limit 1
+        </selectKey>
+    </insert>
+
+
+    <update id="QuestionDAO.update" parameterClass="QuestionDO">
+        UPDATE qa_questions SET GMT_MODIFIED=now()
+        <isNotNull prepend="," property="userId">user_id=#userId:INT#</isNotNull>
+        <isNotNull prepend="," property="status">status=#status:INT#</isNotNull>
+        <isNotNull prepend="," property="content">content=#content:MEDIUMTEXT#</isNotNull>
+        <isNotNull prepend="," property="categoryId">category_id=#categoryId:INT#</isNotNull>
+        <isNotNull prepend="," property="sameAskCount">same_ask_count=#sameAskCount:INT#</isNotNull>
+        <isNotNull prepend="," property="topAnswerId">top_answer_id=#topAnswerId:INT#</isNotNull>
+        <isNotNull prepend="," property="attentionCount">attention_count=#attentionCount:INT#</isNotNull>
+        <isNotNull prepend="," property="answerCount">answer_count=#answerCount:INT#</isNotNull>
+        <isNotNull prepend="," property="features">features=#features:INT#</isNotNull>
+        where id=#id:INT#
+    </update>
+
+    <delete id="QuestionDAO.deleteById" parameterClass="java.lang.Integer">
+        DELETE FROM qa_questions WHERE id = #value#
+    </delete>
+
+</sqlMap>
+

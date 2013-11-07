@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+
+       default-autowire="byName">
+    <!--Taotest developer service-->
+    <context:annotation-config></context:annotation-config>
+
+    <bean id="answerService" class="com.taobao.taotest.qasystem.biz.service.AnswerServiceImpl">
+    </bean>
+    <bean id="questionService" class="com.taobao.taotest.qasystem.biz.service.QuestionServiceImpl">
+    </bean>
+
+</beans>

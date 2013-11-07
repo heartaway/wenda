@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="Answer">
+    <typeAlias alias="AnswerDO" type="com.taobao.taotest.qasystem.biz.domain.AnswerDO"/>
+    <typeAlias alias="PageDO" type="com.taobao.taotest.qasystem.biz.domain.PageDO"/>
+
+    <resultMap id="answerDO" class="AnswerDO">
+        <result column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="status" property="status"/>
+        <result column="content" property="content"/>
+        <result column="question_id" property="questionId"/>
+        <result column="comment_count" property="commentCount"/>
+        <result column="good_count" property="goodCount"/>
+        <result column="bad_count" property="badCount"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+    </resultMap>
+
+
+    <sql id="AnswerDAO.selectorAllInfo">
+        select id,user_id,status,content,question_id,comment_count,good_count,bad_count,gmt_create,gmt_modified from qa_answers
+	</sql>
+
+    <select id="AnswerDAO.queryById" parameterClass="java.lang.Integer" resultMap="answerDO">
+        <include refid="AnswerDAO.selectorAllInfo"/>
+        where id=#value#
+    </select>
+
+    <select id="AnswerDAO.queryListByUserId" parameterClass="java.lang.Integer" resultMap="answerDO">
+          <include refid="AnswerDAO.selectorAllInfo"/>
+        where user_id=#value#
+        <![CDATA[ order by gmt_create DESC ]]>
+    </select>
+
+    <select id="AnswerDAO.queryPersonalAnswersByQuestionId" parameterClass="java.util.HashMap" resultMap="answerDO">
+        <include refid="AnswerDAO.selectorAllInfo"/>
+        where user_id=#userId#     and question_id = #questionId#
+    </select>
+
+    <select id="AnswerDAO.queryPersonalAnswersDistinctQuestionCount"  parameterClass="java.lang.Integer" resultClass="java.lang.Integer" >
+        select count(*) from
+        (
+        select  distinct question_id  from
+        (
+        <include refid="AnswerDAO.selectorAllInfo"/>
+        where user_id=#intValue#
+        ) q
+        ) t
+    </select>
+
+
+    <select id="AnswerDAO.queryPersonalAnswersDistinctQuestion4Paging"  parameterClass="PageDO" resultClass="java.lang.Integer" >
+        select question_id from
+        (
+        select  distinct question_id  from
+        (
+        <include refid="AnswerDAO.selectorAllInfo"/>
+        where user_id=#intValue#
+        <![CDATA[ order by gmt_create DESC ]]>
+        ) q
+        ) t
+        limit #startRecord#,#pageSize#
+    </select>
+
+
+    <select id="AnswerDAO.queryAnswersByQuestionId" parameterClass="java.lang.Integer" resultMap="answerDO">
+        <include refid="AnswerDAO.selectorAllInfo"/>
+        where question_id=#value#
+    </select>
+
+
+    <insert id="AnswerDAO.insert" parameterClass="AnswerDO">
+        INSERT INTO qa_answers
+        (user_id,status,content,question_id,comment_count,good_count,bad_count,gmt_create,gmt_modified)
+        VALUES
+        (#userId#,#status#, #content#,#questionId#,#commentCount#,#goodCount#,#badCount#,now(), now())
+        <selectKey resultClass="Integer">
+          select last_insert_id() as id from qa_answers limit 1
+        </selectKey>
+    </insert>
+
+
+    <update id="AnswerDAO.update" parameterClass="AnswerDO">
+        UPDATE qa_answers SET GMT_MODIFIED=now()
+        <isNotNull prepend="," property="userId">user_id=#userId:INT#</isNotNull>
+        <isNotNull prepend="," property="status">status=#status:INT#</isNotNull>
+        <isNotNull prepend="," property="content">content=#content:MEDIUMTEXT#</isNotNull>
+        <isNotNull prepend="," property="questionId">question_id=#questionId:INT#</isNotNull>
+        <isNotNull prepend="," property="commentCount">comment_count=#commentCount:INT#</isNotNull>
+        <isNotNull prepend="," property="commentCount">good_count=#goodCount:INT#</isNotNull>
+        <isNotNull prepend="," property="commentCount">bad_count=#badCount:INT#</isNotNull>
+        where id=#id:INT#
+    </update>
+
+    <delete id="AnswerDAO.deleteById" parameterClass="java.lang.Integer">
+      DELETE FROM qa_answers WHERE id = #value#
+    </delete>
+
+</sqlMap>

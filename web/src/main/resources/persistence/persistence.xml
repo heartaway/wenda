@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       default-autowire="byName"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+
+    <bean id="qaDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <!-- Connection Info -->
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://10.235.176.137:3306/taotest_production?characterEncoding=utf8" />
+        <property name="username" value="taotest_ttt" />
+        <property name="password" value="ttt_cheshi" />
+    </bean>
+
+    <bean id="taotestDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <!-- Connection Info -->
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://10.235.176.137:3306/taotest_production?characterEncoding=utf8" />
+        <property name="username" value="taotest_ttt" />
+        <property name="password" value="ttt_cheshi" />
+    </bean>
+
+
+    <bean id="qaSqlMapBean" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+        <property name="configLocation" value="classpath:persistence/qa-sqlmap-config.xml"/>
+        <property name="dataSource" ref="qaDataSource"/>
+    </bean>
+
+    <bean id="taotestSqlMapBean" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+        <property name="configLocation" value="classpath:persistence/taotest-sqlmap-config.xml"/>
+        <property name="dataSource" ref="taotestDataSource"/>
+    </bean>
+
+    <!-- DAO base bean -->
+    <bean id="sqlMapBaseDAO" class="com.taobao.common.dao.persistence.SqlMapBaseDAO">
+        <property name="sqlDaoBaseSupport" ref="sqlDaoBaseSupport"/>
+    </bean>
+
+    <!-- multi db Dao support -->
+    <bean id="sqlDaoBaseSupport" class="com.taobao.common.dao.persistence.SqlMapBaseDAOSupport" init-method="init">
+        <property name="dbRouteManager" ref="dbRouteManager"/>
+        <property name="sqlMapList">
+            <map>
+                <entry key="qaSqlMap" value-ref="qaSqlMapBean"/>
+                <entry key="taotestSqlMap" value-ref="taotestSqlMapBean"/>
+            </map>
+        </property>
+    </bean>
+
+    <!-- db route manager -->
+    <bean id="dbRouteManager" class="com.taobao.common.dao.persistence.DBRouteManager">
+        <property name="dbRouteConfig" ref="dbRouteConfig"/>
+    </bean>
+
+    <!-- db route config -->
+    <bean id="dbRouteConfig" class="com.taobao.common.dao.persistence.DBRouteConfig" init-method="init">
+        <property name="allNodeNameList">
+            <list>
+                <value>qaSqlMap</value>
+                <value>taotestSqlMap</value>
+            </list>
+        </property>
+        <property name="defaultNodeNameList">
+            <list>
+                <value>qaSqlMap</value>
+            </list>
+        </property>
+    </bean>
+
+</beans>
