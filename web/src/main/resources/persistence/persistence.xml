@@ -8,7 +8,7 @@
     <bean id="qaDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <!-- Connection Info -->
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://10.235.176.137:3306/taotest_production?characterEncoding=utf8" />
+        <property name="url" value="jdbc:mysql://xxx.xxx.xxx.xxx:3306/taotest_production?characterEncoding=utf8" />
         <property name="username" value="taotest_ttt" />
         <property name="password" value="ttt_cheshi" />
     </bean>
@@ -16,7 +16,7 @@
     <bean id="taotestDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <!-- Connection Info -->
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://10.235.176.137:3306/taotest_production?characterEncoding=utf8" />
+        <property name="url" value="jdbc:mysql://xxx.xxx.xxx.xxx:3306/taotest_production?characterEncoding=utf8" />
         <property name="username" value="taotest_ttt" />
         <property name="password" value="ttt_cheshi" />
     </bean>
